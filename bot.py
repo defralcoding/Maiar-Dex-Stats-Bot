@@ -2,7 +2,10 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 from telegram import Update
 import requests
 import os
+from dotenv import load_dotenv
 from math import log10, floor
+
+load_dotenv()
 
 def start(update: Update, context: CallbackContext):
     user = update.effective_user
@@ -72,7 +75,7 @@ def roundSmallNumber(num):
 
 
 def main():
-    updater = Updater(token=os.environ.get('TELEGRAM_TOKEN'), use_context=True)
+    updater = Updater(token=os.getenv('TELEGRAM_TOKEN'), use_context=True)
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("price", price))
