@@ -7,6 +7,8 @@ from math import log10, floor
 
 load_dotenv()
 
+maiarDexGraphql = 'https://graph.maiar.exchange/graphql'
+
 def start(update: Update, context: CallbackContext):
     user = update.effective_user
     update.message.reply_markdown_v2(fr'Hi {user.mention_markdown_v2()}\!')
@@ -46,6 +48,19 @@ def price(update: Update, context: CallbackContext) -> None:
     update.message.reply_markdown_v2(msg)
 
 
+def pricediscovery(update: Update, context: CallbackContext) -> None:
+
+    obj = {'query': 'query {\n\n  priceDiscoveryContracts {\n    launchedTokenAmount\n    launchedTokenPrice\n    launchedTokenPriceUSD\n    launchedTokenRedeemBalance\n    currentPhase {\n      name\n      penaltyPercent\n    }\n    launchedToken {\n      name\n      identifier\n    }\n  }\n}\n'}
+    response = requests.post(maiarDexGraphql, data = obj).json()
+    priceDiscoveryContract = response["data"]["priceDiscoveryContracts"][0]
+    
+    tokenPriceUsd = float(priceDiscoveryContract["launchedTokenPriceUSD"])
+    tokenName = priceDiscoveryContract["launchedToken"]["name"]
+
+    msg = f"*Current {tokenName} Discovered Price:*\n\n💰 `${str(round(tokenPriceUsd, 4))}` 💰"
+    update.message.reply_markdown_v2(msg)
+
+
 def priceString(pair):
     tokenName = pair["baseSymbol"]
     tokenPrice = pair["basePrice"]
@@ -80,6 +95,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("price", price))
     dispatcher.add_handler(CommandHandler("prices", prices))
+    dispatcher.add_handler(CommandHandler("pricediscovery", pricediscovery))
 
     updater.start_polling()
     updater.idle()
