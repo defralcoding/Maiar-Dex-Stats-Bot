@@ -61,6 +61,16 @@ def pricediscovery(update: Update, context: CallbackContext) -> None:
     update.message.reply_markdown_v2(msg)
 
 
+def bherolaunchpad(update: Update, context: CallbackContext) -> None:
+
+    smartContract = requests.get('https://api.elrond.com/accounts/erd1qqqqqqqqqqqqqpgqacxghsl47g74n8jfycvdmay8pf8kc08wm0qstpnyhr').json()
+    nTicketsBought = int(smartContract["balance"]) / 680000000000000000
+
+    msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
+    msg += f"\n*Number of winning tickets:*\n`7200`"
+    update.message.reply_markdown_v2(msg)
+
+
 def priceString(pair):
     tokenName = pair["baseSymbol"]
     tokenPrice = pair["basePrice"]
@@ -96,6 +106,7 @@ def main():
     dispatcher.add_handler(CommandHandler("price", price))
     dispatcher.add_handler(CommandHandler("prices", prices))
     dispatcher.add_handler(CommandHandler("pricediscovery", pricediscovery))
+    dispatcher.add_handler(CommandHandler("bherolaunchpad", bherolaunchpad))
 
     updater.start_polling()
     updater.idle()
