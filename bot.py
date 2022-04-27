@@ -4,6 +4,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from math import log10, floor
+from datetime import date
 
 load_dotenv()
 
@@ -26,6 +27,8 @@ def prices(update: Update, context: CallbackContext) -> None:
 
     update.message.reply_markdown_v2(msg)
 
+    print("Prices - Date:", date.today())
+
 
 def price(update: Update, context: CallbackContext) -> None:
     #check if the user passed a token to search
@@ -47,6 +50,8 @@ def price(update: Update, context: CallbackContext) -> None:
     msg = "*Maiar Exchange Price:*\n\n" + priceString(pair[0])
     update.message.reply_markdown_v2(msg)
 
+    print("Price - Date:", date.today())
+
 
 def pricediscovery(update: Update, context: CallbackContext) -> None:
 
@@ -60,6 +65,8 @@ def pricediscovery(update: Update, context: CallbackContext) -> None:
     msg = f"*Current {tokenName} Discovered Price:*\n\n💰 `${str(round(tokenPriceUsd, 4))}` 💰"
     update.message.reply_markdown_v2(msg)
 
+    print("PriceDiscovery - Date:", date.today())
+
 
 def bherolaunchpad(update: Update, context: CallbackContext) -> None:
 
@@ -69,6 +76,8 @@ def bherolaunchpad(update: Update, context: CallbackContext) -> None:
     msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
     msg += f"\n*Number of winning tickets:*\n`7200`"
     update.message.reply_markdown_v2(msg)
+
+    print("bhero - Date:", date.today())
 
 
 def priceString(pair):
