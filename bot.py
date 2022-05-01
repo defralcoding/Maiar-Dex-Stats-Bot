@@ -70,11 +70,12 @@ def pricediscovery(update: Update, context: CallbackContext) -> None:
 
 def bherolaunchpad(update: Update, context: CallbackContext) -> None:
 
-    smartContract = requests.get('https://api.elrond.com/accounts/erd1qqqqqqqqqqqqqpgqacxghsl47g74n8jfycvdmay8pf8kc08wm0qstpnyhr').json()
-    nTicketsBought = int(smartContract["balance"]) / 680000000000000000
+    #smartContract = requests.get('https://api.elrond.com/accounts/erd1qqqqqqqqqqqqqpgqacxghsl47g74n8jfycvdmay8pf8kc08wm0qstpnyhr').json()
+    #nTicketsBought = int(smartContract["balance"]) / 680000000000000000
 
-    msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
-    msg += f"\n*Number of winning tickets:*\n`7200`"
+    #msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
+    #msg += f"\n*Number of winning tickets:*\n`7200`"
+    msg = "No launchpad active at the moment."
     update.message.reply_markdown_v2(msg)
 
     print("bhero - Date:", date.today())
