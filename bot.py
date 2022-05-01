@@ -16,7 +16,10 @@ def start(update: Update, context: CallbackContext):
 
 
 def prices(update: Update, context: CallbackContext) -> None:
-    pairs = getPairs()
+    pairs = list(filter(isActivePair, getPairs()))  # filter non-active pairs
+    pairs = list(filter(hasVolume, pairs))  # filter pairs without volume
+    pairs.sort(key=lambda x: x["volume24h"], reverse=True)
+
 
     msg = "*Maiar Exchange Prices:*\n\n"
 
@@ -55,14 +58,16 @@ def price(update: Update, context: CallbackContext) -> None:
 
 def pricediscovery(update: Update, context: CallbackContext) -> None:
 
-    obj = {'query': 'query {\n\n  priceDiscoveryContracts {\n    launchedTokenAmount\n    launchedTokenPrice\n    launchedTokenPriceUSD\n    launchedTokenRedeemBalance\n    currentPhase {\n      name\n      penaltyPercent\n    }\n    launchedToken {\n      name\n      identifier\n    }\n  }\n}\n'}
-    response = requests.post(maiarDexGraphql, data = obj).json()
-    priceDiscoveryContract = response["data"]["priceDiscoveryContracts"][0]
+    #obj = {'query': 'query {\n\n  priceDiscoveryContracts {\n    launchedTokenAmount\n    launchedTokenPrice\n    launchedTokenPriceUSD\n    launchedTokenRedeemBalance\n    currentPhase {\n      name\n      penaltyPercent\n    }\n    launchedToken {\n      name\n      identifier\n    }\n  }\n}\n'}
+    #response = requests.post(maiarDexGraphql, data = obj).json()
+    #priceDiscoveryContract = response["data"]["priceDiscoveryContracts"][0]
     
-    tokenPriceUsd = float(priceDiscoveryContract["launchedTokenPriceUSD"])
-    tokenName = priceDiscoveryContract["launchedToken"]["name"]
+    #tokenPriceUsd = float(priceDiscoveryContract["launchedTokenPriceUSD"])
+    #tokenName = priceDiscoveryContract["launchedToken"]["name"]
 
-    msg = f"*Current {tokenName} Discovered Price:*\n\n💰 `${str(round(tokenPriceUsd, 4))}` 💰"
+    #msg = f"*Current {tokenName} Discovered Price:*\n\n💰 `${str(round(tokenPriceUsd, 4))}` 💰"
+
+    msg = "No active Price Discovery at the moment"
     update.message.reply_markdown_v2(msg)
 
     print("PriceDiscovery - Date:", date.today())
@@ -75,7 +80,8 @@ def bherolaunchpad(update: Update, context: CallbackContext) -> None:
 
     #msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
     #msg += f"\n*Number of winning tickets:*\n`7200`"
-    msg = "No active launchpad at the moment"
+
+    msg = "No active Launchpad at the moment"
     update.message.reply_markdown_v2(msg)
 
     print("bhero - Date:", date.today())
@@ -97,12 +103,18 @@ def priceString(pair):
 
 
 def getPairs():
-    pairs = requests.get('https://api.elrond.com/mex-pairs').json()
-    return list(filter(isActivePair, pairs))  # filter non-active pairs
+    return requests.get('https://api.elrond.com/mex-pairs').json()
 
 
 def isActivePair(pair):
     return pair["totalValue"] != 0
+
+def hasVolume(pair):
+    try:
+        return pair["volume24h"] > 0
+    except KeyError:
+        # Key is not present
+        return False
 
 
 def roundSmallNumber(num):
