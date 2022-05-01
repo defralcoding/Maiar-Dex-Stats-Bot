@@ -75,7 +75,7 @@ def bherolaunchpad(update: Update, context: CallbackContext) -> None:
 
     #msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
     #msg += f"\n*Number of winning tickets:*\n`7200`"
-    msg = "No launchpad active at the moment."
+    msg = "No active launchpad at the moment"
     update.message.reply_markdown_v2(msg)
 
     print("bhero - Date:", date.today())
