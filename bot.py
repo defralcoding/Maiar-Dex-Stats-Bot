@@ -17,9 +17,10 @@ def start(update: Update, context: CallbackContext):
 
 def prices(update: Update, context: CallbackContext) -> None:
     pairs = list(filter(isActivePair, getPairs()))  # filter non-active pairs
+    pairs = list(filter(isNotJungle, pairs))  # filter pairs without volume
     pairs = list(filter(hasVolume, pairs))  # filter pairs without volume
     pairs.sort(key=lambda x: x["volume24h"], reverse=True)
-
+    pairs = pairs[0:10]
 
     msg = "*Maiar Exchange Prices:*\n\n"
 
@@ -31,6 +32,24 @@ def prices(update: Update, context: CallbackContext) -> None:
     update.message.reply_markdown_v2(msg)
 
     print("Prices - Date:", date.today())
+
+def pricesjungle(update: Update, context: CallbackContext) -> None:
+    pairs = list(filter(isActivePair, getPairs()))  # filter non-active pairs
+    pairs = list(filter(isJungle, pairs))  # filter pairs without volume
+    pairs = list(filter(hasVolume, pairs))  # filter pairs without volume
+    pairs.sort(key=lambda x: x["volume24h"], reverse=True)
+
+
+    msg = "*Jungle Exchange Prices:*\n\n"
+
+    for pair in pairs:
+        msg += priceString(pair)
+        if pair != pairs[-1]:
+            msg += "\n  ───────\n"
+
+    update.message.reply_markdown_v2(msg)
+
+    print("Prices Jungle - Date:", date.today())
 
 
 def price(update: Update, context: CallbackContext) -> None:
@@ -88,8 +107,8 @@ def bherolaunchpad(update: Update, context: CallbackContext) -> None:
 
 
 def priceString(pair):
-    tokenName = pair["baseSymbol"]
-    tokenPrice = pair["basePrice"]
+    tokenName = pair["baseSymbol"] if pair["type"] != "jungle" else pair["quoteSymbol"]
+    tokenPrice = pair["basePrice"] if pair["type"] != "jungle" else pair["quotePrice"]
 
     msg = f"*{tokenName}\:* 💰 `$"
 
@@ -109,6 +128,12 @@ def getPairs():
 def isActivePair(pair):
     return pair["totalValue"] != 0
 
+def isJungle(pair):
+    return pair["type"] == "jungle" and pair["quoteId"] != "WEGLD-bd4d79"
+
+def isNotJungle(pair):
+    return pair["type"] != "jungle"
+
 def hasVolume(pair):
     try:
         return pair["volume24h"] > 0
@@ -127,6 +152,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("price", price))
     dispatcher.add_handler(CommandHandler("prices", prices))
+    dispatcher.add_handler(CommandHandler("pricesjungle", pricesjungle))
     dispatcher.add_handler(CommandHandler("pricediscovery", pricediscovery))
     dispatcher.add_handler(CommandHandler("bherolaunchpad", bherolaunchpad))
 
