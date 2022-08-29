@@ -122,7 +122,7 @@ def priceString(pair):
 
 
 def getPairs():
-    return requests.get('https://api.elrond.com/mex-pairs').json()
+    return requests.get('https://api.elrond.com/mex-pairs&size=100').json()
 
 
 def isActivePair(pair):
