@@ -10,6 +10,7 @@ load_dotenv()
 
 maiarDexGraphql = 'https://graph.maiar.exchange/graphql'
 
+
 def start(update: Update, context: CallbackContext):
     user = update.effective_user
     update.message.reply_markdown_v2(fr'Hi {user.mention_markdown_v2()}\!')
@@ -33,12 +34,12 @@ def prices(update: Update, context: CallbackContext) -> None:
 
     print("Prices - Date:", date.today())
 
+
 def pricesjungle(update: Update, context: CallbackContext) -> None:
     pairs = list(filter(isActivePair, getPairs()))  # filter non-active pairs
     pairs = list(filter(isJungle, pairs))  # filter pairs without volume
     pairs = list(filter(hasVolume, pairs))  # filter pairs without volume
     pairs.sort(key=lambda x: x["volume24h"], reverse=True)
-
 
     msg = "*Jungle Exchange Prices:*\n\n"
 
@@ -53,9 +54,10 @@ def pricesjungle(update: Update, context: CallbackContext) -> None:
 
 
 def price(update: Update, context: CallbackContext) -> None:
-    #check if the user passed a token to search
+    # check if the user passed a token to search
     if len(context.args) == 0:
-        update.message.reply_markdown_v2("You have to specify a token to get its price\.\nUsage example: /price MEX")
+        update.message.reply_markdown_v2(
+            "You have to specify a token to get its price\.\nUsage example: /price MEX")
         return
 
     tokenToSearch = context.args[0]
@@ -64,9 +66,10 @@ def price(update: Update, context: CallbackContext) -> None:
     pair = [pair for pair in pairs if tokenToSearch.upper()
             in pair["baseId"]]
 
-    #check if the token has been found
+    # check if the token has been found
     if len(pair) == 0:
-        update.message.reply_markdown_v2("The token you specified has not been found\.\nPlease check the name and try again\.")
+        update.message.reply_markdown_v2(
+            "The token you specified has not been found\.\nPlease check the name and try again\.")
         return
 
     msg = "*Maiar Exchange Price:*\n\n" + priceString(pair[0])
@@ -80,7 +83,7 @@ def pricediscovery(update: Update, context: CallbackContext) -> None:
     #obj = {'query': 'query {\n\n  priceDiscoveryContracts {\n    launchedTokenAmount\n    launchedTokenPrice\n    launchedTokenPriceUSD\n    launchedTokenRedeemBalance\n    currentPhase {\n      name\n      penaltyPercent\n    }\n    launchedToken {\n      name\n      identifier\n    }\n  }\n}\n'}
     #response = requests.post(maiarDexGraphql, data = obj).json()
     #priceDiscoveryContract = response["data"]["priceDiscoveryContracts"][0]
-    
+
     #tokenPriceUsd = float(priceDiscoveryContract["launchedTokenPriceUSD"])
     #tokenName = priceDiscoveryContract["launchedToken"]["name"]
 
@@ -94,13 +97,14 @@ def pricediscovery(update: Update, context: CallbackContext) -> None:
 
 def bherolaunchpad(update: Update, context: CallbackContext) -> None:
 
-    #smartContract = requests.get('https://api.elrond.com/accounts/erd1qqqqqqqqqqqqqpgqacxghsl47g74n8jfycvdmay8pf8kc08wm0qstpnyhr').json()
-    #nTicketsBought = int(smartContract["balance"]) / 680000000000000000
+    smartContract = requests.get(
+        'http://tortugaobs.defralcoding.it:3001/accounts/erd1qqqqqqqqqqqqqpgqmazld0dz27axdf8acslqkncdcrjrqpav548spxdtm9').json()
+    nTicketsBought = (int(smartContract["balance"]) / 10**18) / 0.9
 
-    #msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
-    #msg += f"\n*Number of winning tickets:*\n`7200`"
+    msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
+    msg += f"\n*Number of winning tickets:*\n`11600`"
 
-    msg = "No active Launchpad at the moment"
+    #msg = "No active Launchpad at the moment"
     update.message.reply_markdown_v2(msg)
 
     print("bhero - Date:", date.today())
@@ -128,11 +132,14 @@ def getPairs():
 def isActivePair(pair):
     return pair["totalValue"] != 0
 
+
 def isJungle(pair):
     return pair["type"] == "jungle" and pair["quoteId"] != "WEGLD-bd4d79"
 
+
 def isNotJungle(pair):
     return pair["type"] != "jungle"
+
 
 def hasVolume(pair):
     try:
