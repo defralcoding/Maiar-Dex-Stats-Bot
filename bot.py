@@ -102,7 +102,7 @@ def bherolaunchpad(update: Update, context: CallbackContext) -> None:
     nTicketsBought = (int(smartContract["balance"]) / 10**18) / 0.9
 
     msg = f"*Number of tickets bought for BHero Launchpad:*\n`36572`"
-    msg = f"Sell is closed now."
+    msg = f"Sell is closed now\."
     #msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
     msg += f"\n*Number of winning tickets:*\n`11600`"
 
