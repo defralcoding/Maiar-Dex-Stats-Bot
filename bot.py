@@ -101,7 +101,8 @@ def bherolaunchpad(update: Update, context: CallbackContext) -> None:
         'http://tortugaobs.defralcoding.it:3001/accounts/erd1qqqqqqqqqqqqqpgqmazld0dz27axdf8acslqkncdcrjrqpav548spxdtm9').json()
     nTicketsBought = (int(smartContract["balance"]) / 10**18) / 0.9
 
-    msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
+    msg = f"*Number of tickets bought for BHero Launchpad:*\n`36572`"
+    #msg = f"*Number of tickets bought for BHero Launchpad:*\n`{int(nTicketsBought)}`"
     msg += f"\n*Number of winning tickets:*\n`11600`"
 
     #msg = "No active Launchpad at the moment"
