@@ -98,7 +98,7 @@ def pricediscovery(update: Update, context: CallbackContext) -> None:
 def bherolaunchpad(update: Update, context: CallbackContext) -> None:
 
     smartContract = requests.get(
-        'http://tortugaobs.defralcoding.it:3001/accounts/erd1qqqqqqqqqqqqqpgqmazld0dz27axdf8acslqkncdcrjrqpav548spxdtm9').json()
+        'https://tortugapi.defralcoding.it:2053/accounts/erd1qqqqqqqqqqqqqpgqmazld0dz27axdf8acslqkncdcrjrqpav548spxdtm9').json()
     nTicketsBought = (int(smartContract["balance"]) / 10**18) / 0.9
 
     msg = f"*Number of tickets bought for BHero Launchpad:*\n`36572`"
@@ -128,7 +128,7 @@ def priceString(pair):
 
 
 def getPairs():
-    return requests.get('https://api.elrond.com/mex/pairs?size=100').json()
+    return requests.get('https://tortugapi.defralcoding.it:2053/mex/pairs?size=100').json()
 
 
 def isActivePair(pair):
