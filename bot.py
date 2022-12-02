@@ -78,6 +78,23 @@ def price(update: Update, context: CallbackContext) -> None:
     print("Price - Date:", date.today())
 
 
+def priceofe(update: Update, context: CallbackContext) -> None:
+    pairs = getPairs()
+    pair = [pair for pair in pairs if "OFE"
+            in pair["baseId"]]
+
+    # check if the token has been found
+    if len(pair) == 0:
+        update.message.reply_markdown_v2(
+            "The token you specified has not been found\.\nPlease check the name and try again\.")
+        return
+
+    msg = "*Maiar Exchange OFE Price:*\n\n" + priceString(pair[0])
+    update.message.reply_markdown_v2(msg)
+
+    print("Price OFE - Date:", date.today())
+
+
 def pricediscovery(update: Update, context: CallbackContext) -> None:
 
     #obj = {'query': 'query {\n\n  priceDiscoveryContracts {\n    launchedTokenAmount\n    launchedTokenPrice\n    launchedTokenPriceUSD\n    launchedTokenRedeemBalance\n    currentPhase {\n      name\n      penaltyPercent\n    }\n    launchedToken {\n      name\n      identifier\n    }\n  }\n}\n'}
@@ -160,6 +177,7 @@ def main():
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("price", price))
+    dispatcher.add_handler(CommandHandler("priceofe", priceofe))
     dispatcher.add_handler(CommandHandler("prices", prices))
     dispatcher.add_handler(CommandHandler("pricesjungle", pricesjungle))
     dispatcher.add_handler(CommandHandler("pricediscovery", pricediscovery))
