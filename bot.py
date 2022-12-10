@@ -23,7 +23,7 @@ def prices(update: Update, context: CallbackContext) -> None:
     pairs.sort(key=lambda x: x["volume24h"], reverse=True)
     pairs = pairs[0:10]
 
-    msg = "*Maiar Exchange Prices:*\n\n"
+    msg = "*xExchange Prices:*\n\n"
 
     for pair in pairs:
         msg += priceString(pair)
@@ -72,7 +72,7 @@ def price(update: Update, context: CallbackContext) -> None:
             "The token you specified has not been found\.\nPlease check the name and try again\.")
         return
 
-    msg = "*Maiar Exchange Price:*\n\n" + priceString(pair[0])
+    msg = "*xExchange Price:*\n\n" + priceString(pair[0])
     update.message.reply_markdown_v2(msg)
 
     print("Price - Date:", date.today())
@@ -89,7 +89,7 @@ def priceofe(update: Update, context: CallbackContext) -> None:
             "The token you specified has not been found\.\nPlease check the name and try again\.")
         return
 
-    msg = "*Maiar Exchange OFE Price:*\n\n" + priceString(pair[0])
+    msg = "*xExchange OFE Price:*\n\n" + priceString(pair[0])
     update.message.reply_markdown_v2(msg)
 
     print("Price OFE - Date:", date.today())
