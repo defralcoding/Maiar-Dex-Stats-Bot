@@ -8,7 +8,7 @@ from datetime import date
 
 load_dotenv()
 
-maiarDexGraphql = 'https://graph.maiar.exchange/graphql'
+dexGraphql = 'https://graph.xexchange.com/graphql'
 
 
 def start(update: Update, context: CallbackContext):
@@ -98,7 +98,7 @@ def priceofe(update: Update, context: CallbackContext) -> None:
 def pricediscovery(update: Update, context: CallbackContext) -> None:
 
     #obj = {'query': 'query {\n\n  priceDiscoveryContracts {\n    launchedTokenAmount\n    launchedTokenPrice\n    launchedTokenPriceUSD\n    launchedTokenRedeemBalance\n    currentPhase {\n      name\n      penaltyPercent\n    }\n    launchedToken {\n      name\n      identifier\n    }\n  }\n}\n'}
-    #response = requests.post(maiarDexGraphql, data = obj).json()
+    #response = requests.post(dexGraphql, data = obj).json()
     #priceDiscoveryContract = response["data"]["priceDiscoveryContracts"][0]
 
     #tokenPriceUsd = float(priceDiscoveryContract["launchedTokenPriceUSD"])
@@ -115,7 +115,7 @@ def pricediscovery(update: Update, context: CallbackContext) -> None:
 def bherolaunchpad(update: Update, context: CallbackContext) -> None:
 
     smartContract = requests.get(
-        'https://tortugapi.defralcoding.it:2053/accounts/erd1qqqqqqqqqqqqqpgqmazld0dz27axdf8acslqkncdcrjrqpav548spxdtm9').json()
+        'https://elrond-api.public.blastapi.io/accounts/erd1qqqqqqqqqqqqqpgqmazld0dz27axdf8acslqkncdcrjrqpav548spxdtm9').json()
     nTicketsBought = (int(smartContract["balance"]) / 10**18) / 0.9
 
     msg = f"*Number of tickets bought for BHero Launchpad:*\n`36572`"
@@ -145,7 +145,7 @@ def priceString(pair):
 
 
 def getPairs():
-    return requests.get('https://tortugapi.defralcoding.it:2053/mex/pairs?size=100').json()
+    return requests.get('https://elrond-api.public.blastapi.io/mex/pairs?size=100').json()
 
 
 def isActivePair(pair):
